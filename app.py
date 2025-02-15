@@ -83,8 +83,15 @@ if st.button("Summarize"):
         try:
             if text_to_summarize:
                 chunks = chunk_text(text_to_summarize, max_tokens=1024)
-                summaries = [summarization_model(chunk, max_length=300, min_length=100, do_sample=False)[0]['summary_text'] for chunk in chunks]
-
+                summaries = []
+                
+                for chunk in chunks:
+                    input_length = len(chunk.split())  # Count words in the chunk
+                    max_summary_length = max(50, input_length // 2)  # Dynamically adjust max_length
+                    
+                    summary = summarization_model(chunk, max_length=max_summary_length, min_length=50, do_sample=False)
+                    summaries.append(summary[0]['summary_text'])
+                
                 final_summary = " ".join(summaries)  # Combine all chunk summaries
 
                 st.write("### Summary:")
@@ -93,4 +100,5 @@ if st.button("Summarize"):
                 st.error("Please upload a document first.")
         except Exception as e:
             st.error(f"Error: {e}")
+
 
