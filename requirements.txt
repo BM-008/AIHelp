@@ -6,4 +6,4 @@ python-docx
 pdfplumber
 sentencepiece
 pipeline
-Python3.11
+Python3.12
